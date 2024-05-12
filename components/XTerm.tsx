@@ -4,24 +4,32 @@ import { useEffect, useRef } from 'react'
 import { Terminal } from 'xterm'
 import 'xterm/css/xterm.css'
 import { socket } from '@/socket'
+import { useRecoilState } from 'recoil'
+import { renderAtom } from '@/store/atoms'
 
 export default function XTerm() {
   const terminalRef = useRef<HTMLDivElement>(null);
+  const [render, setRender] = useRecoilState(renderAtom)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
         const terminal = new Terminal({
-            rows: 30,
-            cols: 20
+            rows: 10,
+            cols: 50
         });
 
         terminal.open(terminalRef.current as HTMLDivElement);
+        if(socket) socket.send('clear \b')
 
         let commandBuffer = '';
 
         terminal.onData((data: string) => {
             if (data === '\r') {
                 socket.send(commandBuffer);
+                if(commandBuffer.includes('mkdir') || commandBuffer.includes('cp') || commandBuffer.includes('mv') || commandBuffer.includes('touch')) {
+                    setRender(render => !render)
+                    console.log(render)
+                }
                 commandBuffer = '';
                 terminal.write('\r');
             } else if (data === '\x7F') {
@@ -37,8 +45,6 @@ export default function XTerm() {
         });
 
         socket.onopen = () => {
-          terminal.write("\r")
-            socket.send('\b')
         }
         socket.onmessage = (event) => {
             const message = event.data;
@@ -50,7 +56,5 @@ export default function XTerm() {
         };
     }
 }, []);
-
-
-  return <div className='w-96' ref={terminalRef} />
+  return <div className='' ref={terminalRef} />
 }

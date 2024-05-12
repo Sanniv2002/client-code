@@ -79,7 +79,7 @@ function Ace() {
     return (
         <AceEditor
             onChange={handleCodeChange}
-            height={`${window.innerHeight - 100}px`}
+            height={`${window.innerHeight - 360}px`}
             width={`${window.innerWidth - 800}px`}
             value={code.contents}
             mode="javascript"

@@ -10,8 +10,10 @@ export default function Home() {
     <RecoilRoot>
       <main className="bg-[#151514] min-h-screen flex justify-center items-center gap-3">
         <MyFolderTree />
-        <MyEditor />
-        <MyTerminal />
+        <div className="flex flex-col gap-2">
+          <MyEditor />
+          <MyTerminal />
+        </div>
       </main>
     </RecoilRoot>
   );

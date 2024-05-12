@@ -12,7 +12,7 @@ export default function MyTerminal() {
     const [page, setPage] = useRecoilState(pageAtom)
     const stdout = useRecoilValue(outputAtom)
     const Output = () => {
-        return <div className="bg-white h-screen w-96">
+        return <div className="bg-white h-48 rounded-sm">
             <span className="text-black text-sm p-2">{stdout}</span>
         </div>
     }

@@ -1,9 +1,9 @@
 'use client'
 
-import { fileAtom, loadingAtom } from "@/store/atoms";
+import { fileAtom, loadingAtom, renderAtom } from "@/store/atoms";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react"
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import Spinner from "./Spinner";
 
 interface FileTreeNode {
@@ -20,6 +20,7 @@ export default function MyFolderTree() {
     const [filter, setFilter] = useState("")
     const newFileRef = useRef("")
     const [loading, setLoading] = useRecoilState(loadingAtom)
+    const render = useRecoilValue(renderAtom)
 
     function searchTree(fileTrees: FileTreeNode[] | undefined, filter: string): FileTreeNode[] {
         if (!fileTrees) return [];
@@ -50,7 +51,7 @@ export default function MyFolderTree() {
             setLoading(false)
         }
         getFiles()
-    }, [float])
+    }, [float, render])
 
     function handleClick(node: FileTreeNode) {
         if (node.type === 'directory') return
@@ -92,7 +93,7 @@ export default function MyFolderTree() {
         );
     };
 
-    return <div className="bg-[#1e1f22] min-h-96 w-72 rounded-lg" style={{ height: `${window.innerHeight-45}px`}}>
+    return <div className="bg-[#1e1f22] min-h-96 w-72 rounded-lg hidden sm:block" style={{ height: `${window.innerHeight-45}px`}}>
         <div className="flex justify-between px-6 py-4 gap-10">
             <h2 className="text-white text-md pt-1">Project Files</h2>
             {float ? <button onClick={async () => {
