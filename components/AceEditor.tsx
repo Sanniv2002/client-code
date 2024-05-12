@@ -1,18 +1,18 @@
 'use client'
 
 import AceEditor from "react-ace";
-
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/ext-language_tools";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { codeAtom, fileAtom, loadingAtom } from "@/store/atoms";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
-function Ace({setSaving}: {setSaving: React.Dispatch<React.SetStateAction<boolean>>}) {
+function Ace() {
     const [code, setCode] = useRecoilState(codeAtom)
     const currentFile = useRecoilValue(fileAtom)
+    const setSaving = useSetRecoilState(loadingAtom); // Update loading state
     const isInitialMount = useRef(true);
 
     useEffect(() => {
@@ -30,67 +30,57 @@ function Ace({setSaving}: {setSaving: React.Dispatch<React.SetStateAction<boolea
         }
     
         const updateRemoteCode = async () => {
-            setSaving(true)
-            await axios.put("http://172.28.118.153:8000/code", {
-                code: code.contents,
-                filePath: code.filePath
-            })
-            setSaving(false)
+            setSaving(true); // Set saving state to true
+            try {
+                await axios.put("http://172.28.118.153:8000/code", {
+                    code: code.contents,
+                    filePath: code.filePath
+                })
+            } catch(e) {
+                console.error(e)
+            }
+            setSaving(false); // Set saving state back to false after code update
         }
         updateRemoteCode()
     }, [code])
 
 
-    function debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
+    function debounce<T extends (...args: any[]) => void>(
+        func: T,
+        wait: number,
+        setLoading: React.Dispatch<React.SetStateAction<boolean>> // Add setLoading callback
+      ) {
         let timeout: ReturnType<typeof setTimeout> | undefined;
         return function executedFunction(this: any, ...args: Parameters<T>) {
           const later = () => {
             timeout = undefined;
+            setLoading(false); // Set saving state back to false when debounce ends
             func.apply(this, args);
           };
           clearTimeout(timeout);
+          setLoading(true); // Set saving state to true when debounce starts
           timeout = setTimeout(later, wait);
         } as T;
       }
+      
 
-      function debounceState<T>(func: (state: T) => void, newState: T, delay: number) {
-        let timeoutId: NodeJS.Timeout | null = null;
-    
-        // Define the debounced function
-        function debouncedFunction() {
-            // Clear the existing timeout, if any
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-                timeoutId = null;
-            }
-    
-            // Set a new timeout to apply the state after the delay
-            timeoutId = setTimeout(() => {
-                // Apply the new state
-                func(newState);
-                timeoutId = null;
-            }, delay);
-        }
-    
-        // Return the debounced function
-        return debouncedFunction;
-    }
-    
-
-      const handleCodeChange = debounce((newCode: string) => {
-        setCode({
+      const handleCodeChange = debounce(
+        (newCode: string) => {
+          setCode({
             contents: newCode,
             filePath: code.filePath
-        });
-      }, 2000);
-
-      console.log(code)
+          });
+        },
+        500,
+        setSaving // Pass setSaving function to debounce
+      );
+      
 
     return (
         <AceEditor
             onChange={handleCodeChange}
-            height={`${window.innerHeight-100}px`}
-            width={`${window.innerWidth-800}px`}
+            height={`${window.innerHeight - 100}px`}
+            width={`${window.innerWidth - 800}px`}
             value={code.contents}
             mode="javascript"
             theme="monokai"

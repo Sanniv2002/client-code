@@ -1,15 +1,16 @@
 'use client'
 
-import { fileAtom, outputAtom } from "@/store/atoms"
+import { fileAtom, outputAtom, pageAtom } from "@/store/atoms"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import Ace from "./AceEditor"
 import { useState } from "react"
+import axios from "axios"
 
 export default function MyEditor() {
     const file = useRecoilValue(fileAtom)
-    const [saving, setSaving] = useState(false)
     const setOutput = useSetRecoilState(outputAtom)
     const [running, setRunning] = useState(false)
+    const setPage = useSetRecoilState(pageAtom)
 
     function fileIcon(name: string) {
         return <div>
@@ -31,36 +32,26 @@ export default function MyEditor() {
 
     return <div className="bg-[#1e1f22] rounded-lg p-2">
         <div className="flex justify-between pb-2">
-            <span className="bg-gray-900 rounded-lg text-white text-sm px-5 py-2 flex gap-2">{fileIcon(file.name)}{file.name}</span>
-            {saving ? <div className="py-1 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg dark:bg-gray-800 dark:text-gray-400 inline-flex items-center">
-                <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="#1C64F2" />
-                </svg>
-                Saving...
-            </div> : <div className="py-1 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg dark:bg-gray-800 dark:text-gray-400 inline-flex items-center">
-                <svg className="size-6 pe-2" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 80 80">
-                    <path fill="#8bb7f0" d="M8,75.5c-1.9,0-3.5-1.6-3.5-3.5V8c0-1.9,1.6-3.5,3.5-3.5h64c1.9,0,3.5,1.6,3.5,3.5v64 c0,1.9-1.6,3.5-3.5,3.5H8z"></path><path fill="#4e7ab5" d="M72,5c1.7,0,3,1.3,3,3v64c0,1.7-1.3,3-3,3H8c-1.7,0-3-1.3-3-3V8c0-1.7,1.3-3,3-3H72 M72,4H8 C5.8,4,4,5.8,4,8v64c0,2.2,1.8,4,4,4h64c2.2,0,4-1.8,4-4V8C76,5.8,74.2,4,72,4L72,4z"></path><path fill="#fff" d="M33.9 56.3L19.9 42.2 24.1 38 33.9 47.8 58.6 23.1 62.9 27.3z"></path>
-                </svg>
-                Saved
-            </div>}
-
-
+            <span className="bg-gray-900 rounded-lg text-white text-sm px-5 py-2 flex gap-2 w-36 max-w-36 overflow-x-hidden">{fileIcon(file.name)}{file.name}</span>
             <div className="relative group size-8" onClick={async () => {
                 setRunning(true)
+                const stdout = await axios.get("http://172.28.118.153:8000/run")
+                setOutput(stdout.data)
+                setRunning(false)
+                setPage(true)
             }}>
-                {running ? <div className="bg-gray-800 p-2 mt-1 rounded-md">
+                {running ? <div className="bg-gray-800 p-1 rounded-md cursor-not-allowed">
                     <svg aria-hidden="true" className="inline text-gray-200 animate-spin dark:text-gray-600 fill-green-500" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
                         <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
                     </svg>
                     <span className="sr-only">Loading...</span>
-                </div> : <img className="size-7 cursor-pointer bg-gray-800 p-2 mt-1 rounded-md hover:bg-gray-600 transition-colors duration-200" src="https://img.icons8.com/fluency/48/play--v1.png" alt="play--v1" />}
+                </div> : <img className="size-9 cursor-pointer bg-gray-800 p-2 rounded-md hover:bg-gray-600 transition-colors duration-200" src="https://img.icons8.com/fluency/48/play--v1.png" alt="play--v1" />}
                 <div className="absolute inset-x-0 bottom-9 bg-gray-600 rounded-lg bg-opacity-50 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <span className="text-white text-xs">Run</span>
+                    {running?null:<span className="text-white text-xs">Run</span>}
                 </div>
             </div>
         </div>
-        <Ace setSaving={setSaving} />
+        <Ace />
     </div>
 }
