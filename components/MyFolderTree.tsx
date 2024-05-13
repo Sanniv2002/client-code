@@ -140,7 +140,6 @@ export default function MyFolderTree() {
                 </div>
                 <input onChange={(e) => newFileRef.current = e.target.value} className="text-white bg-gray-700 rounded-sm pl-10 py-3 h-7 max-w-full" type="text" placeholder="filename" />
             </div> : null}
-
             {filter === "" ? renderTree(tree) : renderTree(searchTree(tree, filter))}
         </div>
         {loading? <Spinner/>:null}

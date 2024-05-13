@@ -1,20 +1,24 @@
 import { outputAtom, pageAtom } from "@/store/atoms"
-import React, { useState } from "react"
+import React from "react"
 import { useRecoilState, useRecoilValue } from "recoil"
 import dynamic from 'next/dynamic'
 
 const XTerm = dynamic(() => import('./XTerm'), {
     ssr: false
-  })
+})
 
 export default function MyTerminal() {
 
     const [page, setPage] = useRecoilState(pageAtom)
     const stdout = useRecoilValue(outputAtom)
     const Output = () => {
-        return <div className="bg-white h-48 rounded-sm">
-            <span className="text-black text-sm p-2">{stdout}</span>
+        return <div className="bg-white h-48 rounded-sm overflow-y-scroll ">
+            {stdout.split('\n').map((line, index) => (
+                <span key={index} className="text-black text-sm p-2" style={{ display: 'block' }}>{line}</span>
+            ))}
         </div>
+
+
     }
 
     return (
@@ -29,7 +33,7 @@ export default function MyTerminal() {
                     </li>
                 </ul>
             </div>
-            {page?<Output />:<XTerm />}
+            {page ? <Output /> : <XTerm />}
         </div>
     )
 }

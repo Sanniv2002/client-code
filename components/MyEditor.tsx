@@ -48,7 +48,7 @@ export default function MyEditor() {
                     <span className="sr-only">Loading...</span>
                 </div> : <img className="size-9 cursor-pointer bg-gray-800 p-2 rounded-md hover:bg-gray-600 transition-colors duration-200" src="https://img.icons8.com/fluency/48/play--v1.png" alt="play--v1" />}
                 <div className="absolute inset-x-0 bottom-9 bg-gray-600 rounded-lg bg-opacity-50 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    {running?null:<span className="text-white text-xs">Run</span>}
+                    {running ? null : <span className="text-white text-xs">Run</span>}
                 </div>
             </div>
         </div>
