@@ -8,12 +8,14 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { codeAtom, fileAtom, loadingAtom } from "@/store/atoms";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { dimensionsAtom } from "@/store/atoms/dimensions";
 
 function Ace() {
     const [code, setCode] = useRecoilState(codeAtom)
     const currentFile = useRecoilValue(fileAtom)
     const setSaving = useSetRecoilState(loadingAtom); // Update loading state
     const isInitialMount = useRef(true);
+    const dimensions = useRecoilValue(dimensionsAtom)
 
     useEffect(() => {
         const getCode = async () => {
@@ -79,8 +81,8 @@ function Ace() {
     return (
         <AceEditor
             onChange={handleCodeChange}
-            height={`${window.innerHeight - 360}px`}
-            width={`${window.innerWidth - 800}px`}
+            height={`${dimensions.windowHeight - 360}px`}
+            width={`${dimensions.windowWidth - 800}px`}
             value={code.contents}
             mode="javascript"
             theme="monokai"
