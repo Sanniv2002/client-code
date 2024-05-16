@@ -6,6 +6,6 @@ export const fileAtom = atom({
     default:{
         name: 'index.js',
         type: 'file',
-        filePath: '../user/index.js'
+        filePath: '/home/sanniv/Cloud IDE/user/index.js'
     }
 })

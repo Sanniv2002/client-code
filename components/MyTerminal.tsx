@@ -14,11 +14,9 @@ export default function MyTerminal() {
     const Output = () => {
         return <div className="bg-white h-48 rounded-sm overflow-y-scroll ">
             {stdout.split('\n').map((line, index) => (
-                <span key={index} className="text-black text-sm p-2" style={{ display: 'block' }}>{line}</span>
+                <span key={index} className="text-black text-sm px-2" style={{ display: 'block' }}>{line}</span>
             ))}
         </div>
-
-
     }
 
     return (

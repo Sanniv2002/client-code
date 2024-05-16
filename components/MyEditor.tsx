@@ -32,7 +32,7 @@ export default function MyEditor() {
 
     return <div className="bg-[#1e1f22] rounded-lg p-2">
         <div className="flex justify-between pb-2">
-            <span className="bg-gray-900 rounded-lg text-white text-sm px-5 py-2 flex gap-2 w-36 max-w-36 overflow-x-hidden">{fileIcon(file.name)}{file.name}</span>
+            <span className="bg-gray-700 rounded-lg text-white text-sm px-2 py-2 flex gap-2 overflow-clip">{fileIcon(file.name)}{file.name}</span>
             <div className="relative group size-8" onClick={async () => {
                 setRunning(true)
                 const stdout = await axios.get("http://172.28.118.153:8000/run")
