@@ -35,7 +35,9 @@ export default function MyEditor() {
             <span className="bg-gray-700 rounded-lg text-white text-sm px-2 py-2 flex gap-2 overflow-clip">{fileIcon(file.name)}{file.name}</span>
             <div className="relative group size-8" onClick={async () => {
                 setRunning(true)
-                const stdout = await axios.get("http://172.28.118.153:8000/run")
+                const stdout = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/run`, {
+                    runtime: 'node'
+                })
                 setOutput(stdout.data)
                 setRunning(false)
                 setPage(true)

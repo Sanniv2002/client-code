@@ -9,13 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tabler/icons-react": "^3.4.0",
     "axios": "^1.6.8",
-    "framer-motion": "^11.2.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.2.4",
     "next": "14.2.3",
     "react": "^18",
     "react-ace": "^11.0.1",
     "react-dom": "^18",
     "recoil": "^0.7.7",
+    "tailwind-merge": "^2.3.0",
     "xterm": "^5.2.1"
   },
   "devDependencies": {

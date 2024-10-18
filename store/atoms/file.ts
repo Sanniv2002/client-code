@@ -1,11 +1,11 @@
 import { atom } from "recoil";
 
-
+const fileBasePath = process.env.FILE_BASE_PATH || '/app/files';
 export const fileAtom = atom({
     key: 'fileAtom',
     default:{
-        name: 'index.js',
-        type: 'file',
-        filePath: '/home/sanniv/Cloud IDE/user/index.js'
+        name: '',
+        type: '',
+        filePath: ``
     }
 })

@@ -56,7 +56,7 @@ export default function MyFolderTree() {
     async function getFiles() {
       try {
         setLoading(true);
-        const data = await axios.get("http://172.28.118.153:8000/files");
+        const data = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/files`);
         setTree(data.data.tree);
         setLoading(false);
       } catch (e) {
@@ -223,8 +223,8 @@ export default function MyFolderTree() {
             onClick={async () => {
               if (newFileRef.current !== "") {
                 setLoading(true);
-                await axios.post("http://172.28.118.153:8000/new", {
-                  filePath: `../user/${newFileRef.current}`,
+                await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/new`, {
+                  fileName: `${newFileRef.current}`,
                 });
                 setLoading(false);
               }

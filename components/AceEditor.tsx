@@ -23,7 +23,7 @@ function Ace() {
       try {
         setLoading(true)
         const axiosData = await axios.get(
-          `http://172.28.118.153:8000/file?filePath=${currentFile.filePath}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/file?filePath=${currentFile.filePath}`
         );
         setCode(axiosData.data);
         setLoading(false)
@@ -31,7 +31,7 @@ function Ace() {
         setTimeout(getCode, 3000)
       }
     };
-    getCode();
+    !(currentFile.name === '') && getCode();
   }, [currentFile]);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ function Ace() {
     const updateRemoteCode = async () => {
       setSaving(true); // Set saving state to true
       try {
-        await axios.put("http://172.28.118.153:8000/code", {
+        await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/code`, {
           code: code.contents,
           filePath: code.filePath,
         });
@@ -52,7 +52,7 @@ function Ace() {
       }
       setSaving(false); // Set saving state back to false after code update
     };
-    updateRemoteCode();
+    !(currentFile.name === '') &&  updateRemoteCode();
   }, [code]);
 
   function debounce<T extends (...args: any[]) => void>(

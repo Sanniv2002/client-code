@@ -1,1 +1,2 @@
-export const socket = new WebSocket("ws://172.28.118.153:8000")
+const baseURL = (process.env.NEXT_PUBLIC_BASE_URL || "").split("http://")[1]
+export const socket = new WebSocket(`ws://${baseURL}`)
