@@ -1,0 +1,31 @@
+/* app/toast/Toast.css */
+.toast-container {
+    position: fixed;
+    bottom: 40px; /* Start from the bottom of the screen */
+    right: 20px; /* Align to the right */
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between stacked notifications */
+}
+
+.toast-notification {
+    width: 300px; /* Fixed width for all toasts */
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    opacity: 0; /* Start hidden */
+    transform: translateX(100%); /* Start from off-screen right */
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out; /* Smooth fade and slide */
+}
+
+.toast-notification.opacity-100 {
+    opacity: 1; /* Fully visible */
+    transform: translateX(0); /* Move to original position */
+}
+
+.toast-notification.fade-out {
+    opacity: 0; /* Fade out */
+    transform: translateX(100%); /* Slide down and to the right (off-screen) */
+}

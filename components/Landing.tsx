@@ -1,128 +1,108 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
-import { cn } from "@/utils/cn";
-import {
-    IconBrandGithub,
-    IconBrandGoogle,
-    IconBrandOnlyfans,
-} from "@tabler/icons-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Header } from "./Header";
+import { Footer } from "./Footer";
+import { useToastContext } from "./Toast/ToastProvider";
 
 export default function Landing() {
+    const { addToast } = useToastContext()
+    const hasShownToast = useRef(false);
+
+    useEffect(() => {
+        if (!hasShownToast.current) {
+            const timer = setTimeout(() => {
+                addToast({
+                    type: "New Notification",
+                    who: "Sanniv",
+                    content: "Welcome to Script Box",
+                    time: "A few seconds ago",
+                    src: "/avatar.svg"
+                });
+                hasShownToast.current = true;
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, []);
+
+    const handleShowToast = () => {
+        addToast({
+            type: 'Info',
+            src: '/path/to/image.jpg', // Update with the actual image path
+            who: 'User Name',
+            content: 'This is a toast notification!',
+            time: new Date().toLocaleTimeString(),
+        });
+    };
+
     return (
-        <LampContainer>
-            <motion.h1
-                initial={{ opacity: 0.5, y: 100 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{
-                    delay: 0.3,
-                    duration: 0.8,
-                    ease: "easeInOut",
-                }}
-                className="mt-8 bg-gradient-to-br from-slate-300 to-slate-500 py-4 bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl"
-            >
-                Run Code <br /> on your browser
-                {/* <button
-                    className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-80 text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-                    type="submit"
-                >
-                    <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-                    <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-                    Sign in with Github
-                    </span>
-                    <BottomGradient />
-                </button> */}
-            </motion.h1>
-        </LampContainer>
-    );
-}
-
-export const LampContainer = ({
-    children,
-    className,
-}: {
-    children: React.ReactNode;
-    className?: string;
-}) => {
-    return (
-        <div
-            className={cn(
-                "relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-slate-950 w-full z-0",
-                className
-            )}
-        >
-            <div className="relative flex w-full flex-1 scale-y-125 items-center justify-center isolate z-0 ">
-                <motion.div
-                    initial={{ opacity: 0.5, width: "15rem" }}
-                    whileInView={{ opacity: 1, width: "30rem" }}
-                    transition={{
-                        delay: 0.3,
-                        duration: 0.8,
-                        ease: "easeInOut",
-                    }}
-                    style={{
-                        backgroundImage: `conic-gradient(var(--conic-position), var(--tw-gradient-stops))`,
-                    }}
-                    className="absolute inset-auto right-1/2 h-56 overflow-visible w-[30rem] bg-gradient-conic from-cyan-500 via-transparent to-transparent text-white [--conic-position:from_70deg_at_center_top]"
-                >
-                    <div className="absolute  w-[100%] left-0 bg-slate-950 h-40 bottom-0 z-20 [mask-image:linear-gradient(to_top,white,transparent)]" />
-                    <div className="absolute  w-40 h-[100%] left-0 bg-slate-950  bottom-0 z-20 [mask-image:linear-gradient(to_right,white,transparent)]" />
-                </motion.div>
-                <motion.div
-                    initial={{ opacity: 0.5, width: "15rem" }}
-                    whileInView={{ opacity: 1, width: "30rem" }}
-                    transition={{
-                        delay: 0.3,
-                        duration: 0.8,
-                        ease: "easeInOut",
-                    }}
-                    style={{
-                        backgroundImage: `conic-gradient(var(--conic-position), var(--tw-gradient-stops))`,
-                    }}
-                    className="absolute inset-auto left-1/2 h-56 w-[30rem] bg-gradient-conic from-transparent via-transparent to-cyan-500 text-white [--conic-position:from_290deg_at_center_top]"
-                >
-                    <div className="absolute  w-40 h-[100%] right-0 bg-slate-950  bottom-0 z-20 [mask-image:linear-gradient(to_left,white,transparent)]" />
-                    <div className="absolute  w-[100%] right-0 bg-slate-950 h-40 bottom-0 z-20 [mask-image:linear-gradient(to_top,white,transparent)]" />
-                </motion.div>
-                <div className="absolute top-1/2 h-48 w-full translate-y-12 scale-x-150 bg-slate-950 blur-2xl"></div>
-                <div className="absolute top-1/2 z-50 h-48 w-full bg-transparent opacity-10 backdrop-blur-md"></div>
-                <div className="absolute inset-auto z-50 h-36 w-[28rem] -translate-y-1/2 rounded-full bg-cyan-500 opacity-50 blur-3xl"></div>
-                <motion.div
-                    initial={{ width: "8rem" }}
-                    whileInView={{ width: "16rem" }}
-                    transition={{
-                        delay: 0.3,
-                        duration: 0.8,
-                        ease: "easeInOut",
-                    }}
-                    className="absolute inset-auto z-30 h-36 w-64 -translate-y-[6rem] rounded-full bg-cyan-400 blur-2xl"
-                ></motion.div>
-                <motion.div
-                    initial={{ width: "15rem" }}
-                    whileInView={{ width: "30rem" }}
-                    transition={{
-                        delay: 0.3,
-                        duration: 0.8,
-                        ease: "easeInOut",
-                    }}
-                    className="absolute inset-auto z-50 h-0.5 w-[30rem] -translate-y-[7rem] bg-cyan-400 "
-                ></motion.div>
-
-                <div className="absolute inset-auto z-40 h-44 w-full -translate-y-[12.5rem] bg-slate-950 "></div>
+        <div className="bg-gray-950 h-screen flex flex-col">
+            <Header />
+            <div className="flex-1 flex justify-center items-center flex-col gap-5">
+                <h2 className="text-white text-3xl font-semibold w-72 text-center anima">
+                    Run <span className="text-blue-500">code</span> in a fully is
+                    <span className="text-red-500">o</span>lated{" "}
+                    <span className="text-red-500">e</span>
+                    nvironment<span className="animate-pulse text-red-500">.</span>
+                </h2>
+                <div className="flex gap-2">
+                    <button
+                    onClick={handleShowToast}
+                        type="button"
+                        className="text-white transition-colors duration-150 bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#4285F4]/55"
+                    >
+                        <svg
+                            className="w-4 h-4 me-2"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 18 19"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M8.842 18.083a8.8 8.8 0 0 1-8.65-8.948 8.841 8.841 0 0 1 8.8-8.652h.153a8.464 8.464 0 0 1 5.7 2.257l-2.193 2.038A5.27 5.27 0 0 0 9.09 3.4a5.882 5.882 0 0 0-.2 11.76h.124a5.091 5.091 0 0 0 5.248-4.057L14.3 11H9V8h8.34c.066.543.095 1.09.088 1.636-.086 5.053-3.463 8.449-8.4 8.449l-.186-.002Z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                        Continue with Google
+                    </button>
+                    <button
+                        onClick={() => window.open("https://github.com/Sanniv2002/cloudide-api/tree/master", "_blank")}
+                        type="button"
+                        className="text-white bg-[#24292F] hover:bg-gray-700 transition-colors duration-150 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+                    >
+                        <svg
+                            className="w-4 h-4 me-2"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M10 .333A9.911 9.911 0 0 0 6.866 19.65c.5.092.678-.215.678-.477 0-.237-.01-1.017-.014-1.845-2.757.6-3.338-1.169-3.338-1.169a2.627 2.627 0 0 0-1.1-1.451c-.9-.615.07-.6.07-.6a2.084 2.084 0 0 1 1.518 1.021 2.11 2.11 0 0 0 2.884.823c.044-.503.268-.973.63-1.325-2.2-.25-4.516-1.1-4.516-4.9A3.832 3.832 0 0 1 4.7 7.068a3.56 3.56 0 0 1 .095-2.623s.832-.266 2.726 1.016a9.409 9.409 0 0 1 4.962 0c1.89-1.282 2.717-1.016 2.717-1.016.366.83.402 1.768.1 2.623a3.827 3.827 0 0 1 1.02 2.659c0 3.807-2.319 4.644-4.525 4.889a2.366 2.366 0 0 1 .673 1.834c0 1.326-.012 2.394-.012 2.72 0 .263.18.572.681.475A9.911 9.911 0 0 0 10 .333Z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                        Repo
+                        <svg
+                            className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 14 10"
+                        >
+                            <path
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M1 5h12m0 0L9 1m4 4L9 9"
+                            />
+                        </svg>
+                    </button>
+                </div>
             </div>
-
-            <div className="relative z-50 flex -translate-y-80 flex-col items-center px-5">
-                {children}
-            </div>
+            <Footer />
         </div>
     );
-};
-
-const BottomGradient = () => {
-    return (
-        <>
-            <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
-            <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
-        </>
-    );
-};
+}
