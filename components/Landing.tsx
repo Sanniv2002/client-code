@@ -24,21 +24,6 @@ export default function Landing() {
         }
     }, []);
 
-    useEffect(() => {
-        if (!hasShownToast.current) {
-            const walkthrough = setTimeout(() => {
-                addToast({
-                    type: "New Notification",
-                    who: "Sanniv",
-                    content: "Sign In or create an account to get started",
-                    time: "A second ago",
-                    src: "/avatar.svg"
-                });
-            }, 6000);
-            return () => clearTimeout(walkthrough)
-        }
-    }, []);
-
     const handleShowToast = () => {
         addToast({
             type: 'Info',
