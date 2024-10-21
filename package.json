@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@tabler/icons-react": "^3.4.0",
+    "@types/js-cookie": "^3.0.6",
     "axios": "^1.7.7",
     "clsx": "^2.1.1",
+    "js-cookie": "^3.0.5",
     "next": "14.2.3",
     "next-auth": "^4.24.8",
     "react": "^18",

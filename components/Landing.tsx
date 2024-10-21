@@ -27,7 +27,7 @@ export default function Landing() {
     const handleShowToast = () => {
         addToast({
             type: 'Info',
-            src: '/path/to/image.jpg', // Update with the actual image path
+            src: '/path/to/image.jpg',
             who: 'User Name',
             content: 'This is a toast notification!',
             time: new Date().toLocaleTimeString(),
@@ -36,7 +36,7 @@ export default function Landing() {
 
     return (
         <div className="bg-gray-950 h-screen flex flex-col">
-            <Header />
+            <Header loggedIn={false} isAdmin={false} />
             <div className="flex-1 flex justify-center items-center flex-col gap-5">
                 <h2 className="text-white text-3xl font-semibold w-72 text-center anima">
                     Run <span className="text-blue-500">code</span> in a fully is

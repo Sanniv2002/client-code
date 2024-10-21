@@ -1,0 +1,28 @@
+/* Add this CSS to your global stylesheet or component styles */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 10px; /* Width of the vertical scrollbar */
+    height: 10px; /* Height of the horizontal scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Background of the track */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #888; /* Color of the thumb */
+    border-radius: 4px; /* Round the edges */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color of the thumb on hover */
+}
+
+/* Additional styles for the horizontal scrollbar */
+.custom-scrollbar::-webkit-scrollbar-thumb:horizontal {
+    background: #888; /* Color of the horizontal thumb */
+    border-radius: 4px; /* Round the edges for horizontal thumb */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:horizontal:hover {
+    background: #555; /* Color of the horizontal thumb on hover */
+}
