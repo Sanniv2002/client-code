@@ -14,13 +14,28 @@ export default function Landing() {
                 addToast({
                     type: "New Notification",
                     who: "Sanniv",
-                    content: "Hola! Welcome to Script Box",
+                    content: "Hola! Welcome to Script Box. Sign In or create an account to get started",
                     time: "A second ago",
                     src: "/avatar.svg"
                 });
                 hasShownToast.current = true;
             }, 3000);
             return () => clearTimeout(timer);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!hasShownToast.current) {
+            const walkthrough = setTimeout(() => {
+                addToast({
+                    type: "New Notification",
+                    who: "Sanniv",
+                    content: "Sign In or create an account to get started",
+                    time: "A second ago",
+                    src: "/avatar.svg"
+                });
+            }, 6000);
+            return () => clearTimeout(walkthrough)
         }
     }, []);
 
@@ -46,7 +61,7 @@ export default function Landing() {
                 </h2>
                 <div className="flex gap-2">
                     <button
-                    onClick={handleShowToast}
+                        onClick={handleShowToast}
                         type="button"
                         className="text-white transition-colors duration-150 bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#4285F4]/55"
                     >

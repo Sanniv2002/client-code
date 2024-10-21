@@ -9,6 +9,9 @@ const Toast = ({ message, onClose }: { message: any; onClose: () => void }) => {
     useEffect(() => {
         setIsVisible(true); // Show the toast
 
+        const audio = new Audio('/notification.mp3');
+        audio.play();
+
         const timer = setTimeout(() => {
             setIsFadingOut(true); // Start fade out
             setTimeout(onClose, 500); // Call onClose after fade-out

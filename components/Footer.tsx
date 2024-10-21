@@ -8,7 +8,7 @@ export const Footer = () => {
     const checkSystemStatus = async () => {
         try {
             // Replace with your actual endpoint
-            const response = await fetch(''); // Example endpoint
+            const response = await fetch('https://api.sanniv.tech'); // Example endpoint
             if (response.ok) {
                 const data = await response.json();
                 setIsOnline(data.message === 'Server is healthy');
