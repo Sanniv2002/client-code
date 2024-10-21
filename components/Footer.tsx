@@ -32,11 +32,11 @@ export const Footer = () => {
     }, []);
 
     return (
-        <footer className="bg-gray-950 py-3 relative flex justify-center items-center px-4">
+        <footer className="bg-gray-950 py-3 relative md:flex justify-center items-center px-4 flex-col">
             <p className="text-white text-sm text-center flex-1">&copy; 2024 Scriptbox-API. All rights reserved.</p>
-            <div className={`px-2 py-1 rounded-md absolute right-4 flex items-center hover:cursor-pointer hover:bg-gray-800 transition-colors duration-200`}>
-                <span className={`w-2.5 h-2.5 rounded-full ${isOnline ? 'bg-green-500' : 'bg-red-500 animate-pulse'} mr-1`}></span>
-                <span className="text-white text-sm">{statusMessage}</span>
+            <div className="flex justify-center items-center mt-2 md:mt-0 md:absolute md:right-4">
+                <span className={`w-2.5 h-2.5 rounded-full ${isOnline ? 'bg-green-500' : 'bg-red-500'} mr-1`}></span>
+                <span className="text-white text-xs">{statusMessage}</span>
             </div>
         </footer>
     );

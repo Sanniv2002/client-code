@@ -14,8 +14,8 @@ export default function Landing() {
                 addToast({
                     type: "New Notification",
                     who: "Sanniv",
-                    content: "Welcome to Script Box",
-                    time: "A few seconds ago",
+                    content: "Hola! Welcome to Script Box",
+                    time: "A second ago",
                     src: "/avatar.svg"
                 });
                 hasShownToast.current = true;
@@ -66,7 +66,7 @@ export default function Landing() {
                         Continue with Google
                     </button>
                     <button
-                        onClick={() => window.open("https://github.com/Sanniv2002/cloudide-api/tree/master", "_blank")}
+                        onClick={() => window.open("https://github.com/Sanniv2002/client-code", "_blank")}
                         type="button"
                         className="text-white bg-[#24292F] hover:bg-gray-700 transition-colors duration-150 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
                     >

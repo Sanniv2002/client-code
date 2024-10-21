@@ -1,7 +1,7 @@
 /* app/toast/Toast.css */
 .toast-container {
     position: fixed;
-    bottom: 40px; /* Start from the bottom of the screen */
+    bottom: 45px; /* Start from the bottom of the screen */
     right: 20px; /* Align to the right */
     z-index: 9999;
     display: flex;
