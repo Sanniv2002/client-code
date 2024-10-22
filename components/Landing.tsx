@@ -3,10 +3,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { useToastContext } from "./Toast/ToastProvider";
+import { useRouter } from "next/navigation";
 
 export default function Landing() {
     const { addToast } = useToastContext()
     const hasShownToast = useRef(false);
+    const router = useRouter()
 
     useEffect(() => {
         if (!hasShownToast.current) {
@@ -46,7 +48,7 @@ export default function Landing() {
                 </h2>
                 <div className="flex gap-2">
                     <button
-                        onClick={handleShowToast}
+                        onClick={() => router.replace(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/google`)}
                         type="button"
                         className="text-white transition-colors duration-150 bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#4285F4]/55"
                     >

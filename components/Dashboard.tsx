@@ -5,9 +5,11 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { userAtom } from "@/store/atoms/user";
 import { Admin } from "./Admin";
+import { useRouter } from 'next/navigation'
 
 export const Dashboard = () => {
     const [user, setUser] = useRecoilState(userAtom);
+    const router = useRouter()
 
     useEffect(() => {
         async function init() {
@@ -17,7 +19,7 @@ export const Dashboard = () => {
                 });
                 setUser(whoami.data);
             } catch (error) {
-                console.log("Not logged in");
+                router.push("/")
             }
         }
         init();
@@ -26,9 +28,6 @@ export const Dashboard = () => {
     return (
         <div className="bg-gray-950 h-screen flex flex-col">
             <Header loggedIn={user.isLoggedIn} isAdmin={user.role === 'ADMIN'} />
-            <div className="flex-grow">
-                {user.role === 'ADMIN' ? <Admin /> : null}
-            </div>
             <Footer />
         </div>
     );
