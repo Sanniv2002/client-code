@@ -6,6 +6,7 @@ import { useRecoilState } from "recoil";
 import { userAtom } from "@/store/atoms/user";
 import { Admin } from "./Admin";
 import { useRouter } from 'next/navigation'
+import { WorkArea } from "./WorkArea"
 
 export const Dashboard = () => {
     const [user, setUser] = useRecoilState(userAtom);
@@ -26,8 +27,9 @@ export const Dashboard = () => {
     }, [setUser]);
 
     return (
-        <div className="bg-gray-950 h-screen flex flex-col">
+        <div className="bg-gray-950 h-screen flex flex-col justify-between">
             <Header loggedIn={user.isLoggedIn} isAdmin={user.role === 'ADMIN'} />
+                <WorkArea editProfileHref="/dashboard/edit"/>
             <Footer />
         </div>
     );

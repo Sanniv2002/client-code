@@ -1,0 +1,48 @@
+.messages-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 400px;
+    margin: 0 auto;
+    overflow-y: auto;
+    height: 100vh;
+    padding: 1rem;
+    background-color: #f9f9f9;
+  }
+  
+  .message {
+    background-color: #e1f5fe;
+    color: #0277bd;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: slideDown 0.3s ease forwards;
+  }
+  
+  .new-message {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .timestamp {
+    font-size: 0.8rem;
+    color: #757575;
+    margin-top: 0.5rem;
+    text-align: right;
+  }
+  
+  /* Slide-down animation */
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
