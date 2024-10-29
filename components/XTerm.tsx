@@ -76,7 +76,7 @@ export default function XTerm({ alias }: { alias: string }) {
         if (data === "\r") {
           socket.send(commandBuffer);
           if (
-            ["mkdir", "cp", "mv", "touch", "rm", "rmdir", "npm"].some((cmd) =>
+            ["mkdir", "cp", "mv", "touch", "rm", "rmdir", "npm", "npm init -y"].some((cmd) =>
               commandBuffer.includes(cmd)
             )
           ) {
