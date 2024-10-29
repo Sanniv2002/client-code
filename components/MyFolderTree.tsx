@@ -14,7 +14,7 @@ interface FileTreeNode {
   children?: FileTreeNode[];
 }
 
-export default function MyFolderTree() {
+export default function MyFolderTree({ alias }: { alias: string }) {
   const [tree, setTree] = useState<FileTreeNode[]>();
   const [float, setFloat] = useState<boolean>();
   const [currentFile, setCurrentFile] = useRecoilState(fileAtom);
@@ -56,7 +56,7 @@ export default function MyFolderTree() {
     async function getFiles() {
       try {
         setLoading(true);
-        const data = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/files`);
+        const data = await axios.get(`https://${alias}.${process.env.NEXT_PUBLIC_RESOURCE_DOMAIN}/files`);
         setTree(data.data.tree);
         setLoading(false);
       } catch (e) {
@@ -78,11 +78,10 @@ export default function MyFolderTree() {
       <ul>
         {nodes.map((node, index) => (
           <li
-            className={`${
-              node.type === "directory"
+            className={`${node.type === "directory"
                 ? "cursor-not-allowed pl-3"
                 : "cursor-pointer hover:bg-gray-600 transition-colors duration-200 rounded-sm pl-3 py-0.5"
-            } ${currentFile.name === node.name ? "bg-gray-700" : ""}`}
+              } ${currentFile.name === node.name ? "bg-gray-700" : ""}`}
             key={index}
             onClick={() => handleClick(node)}
           >

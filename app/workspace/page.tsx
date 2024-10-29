@@ -1,12 +1,16 @@
 'use client'
 
 import Workspace from "@/components/Workspace";
+import { useSearchParams } from "next/navigation";
 import { RecoilRoot } from "recoil";
 
 export default function Home() {
+  const searchParams = useSearchParams()
+  const alias = searchParams.get('alias')
+  const env = searchParams.get('env')
     return (
       <RecoilRoot>
-        <Workspace />
+        <Workspace alias={alias as string} env={env as string}/>
       </RecoilRoot>
     );
   }

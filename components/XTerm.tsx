@@ -7,7 +7,7 @@ import { socket } from "@/socket";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { loadingAtom, renderAtom } from "@/store/atoms";
 
-export default function XTerm() {
+export default function XTerm({alias} : {alias: string}) {
   const terminalRef = useRef<HTMLDivElement>(null);
   const [render, setRender] = useRecoilState(renderAtom);
   const setLoading = useSetRecoilState(loadingAtom);
@@ -33,7 +33,8 @@ export default function XTerm() {
       });
 
       terminal.open(terminalRef.current as HTMLDivElement);
-      initSocket(socket);
+      const wsUrl = `wss://${alias}.${process.env.NEXT_PUBLIC_RESOURCE_DOMAIN}`;
+      initSocket(new WebSocket(wsUrl));
 
       let commandBuffer = "";
 

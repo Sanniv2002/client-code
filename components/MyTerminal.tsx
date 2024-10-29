@@ -7,7 +7,7 @@ const XTerm = dynamic(() => import('./XTerm'), {
     ssr: false
 })
 
-export default function MyTerminal() {
+export default function MyTerminal({ alias }: { alias: string }) {
 
     const [page, setPage] = useRecoilState(pageAtom)
     const stdout = useRecoilValue(outputAtom)
@@ -31,7 +31,7 @@ export default function MyTerminal() {
                     </li>
                 </ul>
             </div>
-            {page ? <Output /> : <XTerm />}
+            {page ? <Output /> : <XTerm alias={alias}/>}
         </div>
     )
 }
