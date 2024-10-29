@@ -6,16 +6,35 @@ import "xterm/css/xterm.css";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { loadingAtom, renderAtom } from "@/store/atoms";
 
-export default function XTerm({alias} : {alias: string}) {
+export default function XTerm({ alias }: { alias: string }) {
   const terminalRef = useRef<HTMLDivElement>(null);
   const [render, setRender] = useRecoilState(renderAtom);
   const setLoading = useSetRecoilState(loadingAtom);
-  const [socket, setSocket] = useState<WebSocket>()
+  const [socket, setSocket] = useState<WebSocket | null>(null);
 
   useEffect(() => {
     const wsUrl = `wss://${alias}.${process.env.NEXT_PUBLIC_RESOURCE_DOMAIN}`;
-    setSocket(new WebSocket(wsUrl))
-  }, [])
+    const ws = new WebSocket(wsUrl);
+
+    ws.onopen = () => {
+      console.log("WebSocket connection opened");
+      initSocket(ws);
+    };
+
+    ws.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    ws.onclose = (event) => {
+      console.warn("WebSocket closed:", event);
+    };
+
+    setSocket(ws);
+    return () => {
+      ws.close();
+      setSocket(null);
+    };
+  }, [alias]);
 
   const initSocket = (ws: WebSocket) => {
     setLoading(true);
@@ -23,45 +42,32 @@ export default function XTerm({alias} : {alias: string}) {
       ws.send("clear \b");
       setLoading(false);
     } else {
-      // Queue a retry
-      setTimeout(() => {
-        initSocket(ws);
-      }, 1000);
+      setTimeout(() => initSocket(ws), 1000);
     }
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const terminal = new Terminal({
-        rows: 10,
-        cols: 75,
-      });
-
+    if (typeof window !== "undefined" && socket) {
+      const terminal = new Terminal({ rows: 10, cols: 75 });
       terminal.open(terminalRef.current as HTMLDivElement);
-      initSocket(socket!);
 
       let commandBuffer = "";
 
       terminal.onData((data: string) => {
         if (data === "\r") {
-          socket!.send(commandBuffer);
+          socket.send(commandBuffer);
           if (
-            commandBuffer.includes("mkdir") ||
-            commandBuffer.includes("cp") ||
-            commandBuffer.includes("mv") ||
-            commandBuffer.includes("touch") ||
-            commandBuffer.includes("rm") ||
-            commandBuffer.includes("rm -r") ||
-            commandBuffer.includes("rmdir") ||
-            commandBuffer.includes("npm")
+            ["mkdir", "cp", "mv", "touch", "rm", "rmdir", "npm"].some((cmd) =>
+              commandBuffer.includes(cmd)
+            )
           ) {
-            setRender((render) => !render);
-            console.log(render);
+            setRender((prev) => !prev);
+            console.log("Render state toggled:", !render);
           }
           commandBuffer = "";
           terminal.write("\r");
         } else if (data === "\x7F") {
-          // Handle backspace (ASCII code 127)
+          // Handle backspace
           if (commandBuffer.length > 0) {
             commandBuffer = commandBuffer.slice(0, -1);
             terminal.write("\b \b");
@@ -72,15 +78,17 @@ export default function XTerm({alias} : {alias: string}) {
         }
       });
 
-      socket!.onmessage = (event) => {
+      socket.onmessage = (event) => {
         const message = event.data;
         terminal.write(message);
       };
 
+      // Clean up the terminal on component unmount
       return () => {
         terminal.dispose();
       };
     }
-  }, []);
-  return <div className="" ref={terminalRef} />;
+  }, [socket]);
+
+  return <div ref={terminalRef} />;
 }
