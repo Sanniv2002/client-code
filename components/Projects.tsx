@@ -28,10 +28,9 @@ interface ProjectsProps {
     listAll?: boolean;
     scroll?: boolean;
     setDoneDeletion: React.Dispatch<React.SetStateAction<boolean>>;
-    deletion: boolean
 }
 
-export const Projects: React.FC<ProjectsProps> = ({ title, projects, setIsOpen, listAll = false, scroll = false, deletion, setDoneDeletion }) => {
+export const Projects: React.FC<ProjectsProps> = ({ title, projects, setIsOpen, listAll = false, scroll = false, setDoneDeletion }) => {
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const [open, setOpen] = useState(false)
     const router = useRouter();

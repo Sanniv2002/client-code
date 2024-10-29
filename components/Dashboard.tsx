@@ -58,7 +58,7 @@ export const Dashboard = () => {
                 >
                     <Sidebar editProfileHref="/dashboard/edit" page={page} setPage={setPage} />
                 </AnimateIn>
-                {page? <Projects projects={projects} setIsOpen={setIsOpen} title="Your Recent Projects" setDoneDeletion={setDoneDeletion} deletion={doneDeletion} /> : <EditProfile />}
+                {page? <Projects projects={projects} setIsOpen={setIsOpen} title="Your Recent Projects" setDoneDeletion={setDoneDeletion} /> : <EditProfile />}
                 <Blogs />
             </section>
             <Footer />
