@@ -14,6 +14,7 @@ export const Boxes = () => {
     const [projects, setProjects] = useState([])
     const [isOpen, setIsOpen] = useState(false)
     const router = useRouter()
+    const [doneDeletion, setDoneDeletion] = useState(false)
     useEffect(() => {
         async function init() {
             try {
@@ -30,7 +31,7 @@ export const Boxes = () => {
             }
         }
         init();
-    }, [setUser]);
+    }, [setUser, doneDeletion]);
 
     return <div className="bg-gray-950 h-screen flex flex-col justify-between">
         <StartBox isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -42,7 +43,7 @@ export const Boxes = () => {
             <Header loggedIn={user.isLoggedIn} isAdmin={user.role === 'ADMIN'} otherPage={true} />
         </AnimateIn>
         <section className="md:flex md:flex-row flex flex-col items-stretch">
-            <Projects projects={projects} setIsOpen={setIsOpen} title="All Your Projects" listAll={true} scroll={true}/>
+            <Projects projects={projects} setIsOpen={setIsOpen} title="All Your Projects" listAll={true} scroll={true} setDoneDeletion={setDoneDeletion} />
         </section>
         <Footer />
     </div>
