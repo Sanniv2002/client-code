@@ -14,57 +14,71 @@ const StartBox = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: React.Dis
     const [resource, setResource] = useRecoilState(resourceAtom)
     const router = useRouter()
 
-    const startEventStream = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/start`, {
-                name: name,
-                environment: selectedEnvironment
-            }, {
-                headers: {
-                    'Accept': 'text/event-stream',
-                },
-                responseType: 'stream',
-                adapter: 'fetch',
-                withCredentials: true
-            });
-            if (response.status === 200) {
-                const stream = response.data;
-                const reader = stream.pipeThrough(new TextDecoderStream()).getReader();
-    
-                while (true) {
-                    const { value, done } = await reader.read();
-                    if (done) {
-                        break;
-                    }
-                    const messages = value.split(/data:\s+/);
-                    if(messages.length === 1 && JSON.parse(messages[0])){
-                        router.push(`/workspace?alias=${JSON.parse(messages[0]).alias}&env=${selectedEnvironment}`)
-                        return
-                    }
-                    messages.slice(1).forEach((msg: any) => {
-                        try {
-                            setMessages(prevMessages => [...prevMessages, JSON.parse(msg).status]);
-                        } catch (parseError) {
-                            console.error("Error parsing message:", parseError);
-                        }
-                    });
-                }
-            }
-        } catch (error) {
-            console.error("Error starting the event stream:", error);
-        }
-    };
+    // const startEventStream = async (event: React.FormEvent<HTMLFormElement>) => {
+    //     event.preventDefault();
+    //     try {
+    //         const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/start`, {
+    //             name: name,
+    //             environment: selectedEnvironment
+    //         }, {
+    //             headers: {
+    //                 'Accept': 'text/event-stream',
+    //             },
+    //             responseType: 'stream',
+    //             adapter: 'fetch',
+    //             withCredentials: true
+    //         });
+    //         if (response.status === 200) {
+    //             const stream = response.data;
+    //             const reader = stream.pipeThrough(new TextDecoderStream()).getReader();
 
-    console.log(resource)
-    
-
+    //             while (true) {
+    //                 const { value, done } = await reader.read();
+    //                 if (done) {
+    //                     break;
+    //                 }
+    //                 const messages = value.split(/data:\s+/);
+    //                 if(messages.length === 1 && JSON.parse(messages[0])){
+    //                     router.push(`/workspace?alias=${JSON.parse(messages[0]).alias}&env=${selectedEnvironment}`)
+    //                     return
+    //                 }
+    //                 messages.slice(1).forEach((msg: any) => {
+    //                     try {
+    //                         setMessages(prevMessages => [...prevMessages, JSON.parse(msg).status]);
+    //                     } catch (parseError) {
+    //                         console.error("Error parsing message:", parseError);
+    //                     }
+    //                 });
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.error("Error starting the event stream:", error);
+    //     }
+    // };
 
     const handleSubmit = async (e: any) => {
+        e.preventDefault();
         if (name && selectedEnvironment) {
+            setProcessing(true)
             try {
                 setProcessing(true)
-                startEventStream(e)
+                const response = await axios.post(
+                    `${process.env.NEXT_PUBLIC_API_URL}/start`,
+                    {
+                        name: name,
+                        environment: selectedEnvironment
+                    },
+                    {
+                        withCredentials: true
+                    }
+                );
+                if(response.data) {
+                    router.push(`/workspace?alias=${response.data.alias}&env=${selectedEnvironment}`)
+                } else {
+                    alert("Something went wrong!")
+                }
+                await new Promise(resolve => setTimeout(resolve, 10000));
+
             } catch (e) {
                 console.log(e)
             }
