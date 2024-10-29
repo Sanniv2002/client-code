@@ -22,7 +22,7 @@ const Workspace = ({alias, env} : {alias: string, env:string}) => {
     <main className="bg-[#151514] min-h-screen flex justify-center items-center gap-3">
       <MyFolderTree alias={alias}/>
       <div className="flex flex-col gap-3">
-        <MyEditor />
+        <MyEditor alias={alias} />
         <MyTerminal alias={alias}/>
       </div>
     </main>

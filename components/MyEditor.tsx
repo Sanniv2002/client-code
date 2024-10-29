@@ -6,7 +6,7 @@ import Ace from "./AceEditor"
 import { useState } from "react"
 import axios from "axios"
 
-export default function MyEditor() {
+export default function MyEditor({ alias }: { alias: string }) {
     const file = useRecoilValue(fileAtom)
     const setOutput = useSetRecoilState(outputAtom)
     const [running, setRunning] = useState(false)
@@ -35,7 +35,7 @@ export default function MyEditor() {
             <span className="bg-gray-700 rounded-lg text-white text-sm px-2 py-2 flex gap-2 overflow-clip">{fileIcon(file.name)}{file.name}</span>
             <div className="relative group size-8" onClick={async () => {
                 setRunning(true)
-                const stdout = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/run`, {
+                const stdout = await axios.post(`https://${alias}.${process.env.NEXT_PUBLIC_RESOURCE_DOMAIN}/run`, {
                     runtime: 'node'
                 })
                 setOutput(stdout.data)
@@ -54,6 +54,6 @@ export default function MyEditor() {
                 </div>
             </div>
         </div>
-        <Ace />
+        <Ace alias={alias}/>
     </div>
 }

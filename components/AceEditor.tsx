@@ -6,11 +6,11 @@ import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/ext-language_tools";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { codeAtom, fileAtom, loadingAtom } from "@/store/atoms";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import axios from "axios";
 import { dimensionsAtom } from "@/store/atoms/dimensions";
 
-function Ace() {
+function Ace({ alias }: { alias: string }) {
   const [code, setCode] = useRecoilState(codeAtom);
   const currentFile = useRecoilValue(fileAtom);
   const setSaving = useSetRecoilState(loadingAtom); // Update loading state
@@ -23,7 +23,7 @@ function Ace() {
       try {
         setLoading(true)
         const axiosData = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/file?filePath=${currentFile.filePath}`
+          `https://${alias}.${process.env.NEXT_PUBLIC_RESOURCE_DOMAIN}/file?filePath=${currentFile.filePath}`
         );
         setCode(axiosData.data);
         setLoading(false)
@@ -43,7 +43,7 @@ function Ace() {
     const updateRemoteCode = async () => {
       setSaving(true); // Set saving state to true
       try {
-        await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/code`, {
+        await axios.put(`https://${alias}.${process.env.NEXT_PUBLIC_RESOURCE_DOMAIN}/code`, {
           code: code.contents,
           filePath: code.filePath,
         });
@@ -52,7 +52,7 @@ function Ace() {
       }
       setSaving(false); // Set saving state back to false after code update
     };
-    !(currentFile.name === '') &&  updateRemoteCode();
+    !(currentFile.name === '') && updateRemoteCode();
   }, [code]);
 
   function debounce<T extends (...args: any[]) => void>(
