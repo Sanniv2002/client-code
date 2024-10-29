@@ -12,7 +12,6 @@ export const Messages = ({ messages, isStarting }: { messages: Array<string>, is
                     </div>
                     <div className="p-4 md:p-5 flex flex-col">
                         <ol className="relative ms-3.5 mb-4 md:mb-5">
-                            {messages.map((message, index) => (
                                 <li className="ms-8">
                                     <span className="absolute flex items-center justify-center w-6 h-6 rounded-full -start-3.5">
                                         <div role="status">
@@ -23,10 +22,9 @@ export const Messages = ({ messages, isStarting }: { messages: Array<string>, is
                                         </div>
                                     </span>
                                     <h3 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white flex gap-2">
-                                        {message}
+                                        Starting remote service
                                     </h3>
                                 </li>
-                            ))}
                         </ol>
                     </div>
                 </div>
