@@ -15,7 +15,7 @@ const Toast = ({ message, onClose }: { message: any; onClose: () => void }) => {
         const timer = setTimeout(() => {
             setIsFadingOut(true); // Start fade out
             setTimeout(onClose, 500); // Call onClose after fade-out
-        }, 3000); // Adjust duration for automatic closing
+        }, 4000); // Adjust duration for automatic closing
 
         return () => clearTimeout(timer); // Cleanup timer
     }, [onClose]);

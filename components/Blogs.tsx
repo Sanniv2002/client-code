@@ -11,7 +11,7 @@ export const Blogs = () => {
                         <span className="text-sm">2 days ago</span>
                     </div>
                     <h2 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><a href="#">How to start a new Environment?</a></h2>
-                    <p className="mb-5 text-sm font-light text-gray-500 dark:text-gray-400">To get started with your online IDE, click New Box. From there, choose an environment, enter a name, and click Start. You&apos;re all set to begin coding!</p>
+                    <p className="mb-5 text-sm font-light text-gray-500 dark:text-gray-400">To get started with your online IDE, click New Project. From there, choose an environment, enter a name, and click Start. You&apos;re all set to begin coding!</p>
                     <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-4">
                         <img className="w-7 h-7 rounded-full" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png" alt="Bonnie Green avatar" />

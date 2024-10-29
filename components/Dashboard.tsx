@@ -10,6 +10,7 @@ import AnimateIn from "./AnimateIn";
 import { Projects } from "./Projects";
 import StartBox from "./StartBox";
 import { Blogs } from "./Blogs";
+import { EditProfile } from "./EditProfile";
 
 export const Dashboard = () => {
     const [user, setUser] = useRecoilState(userAtom);
@@ -17,6 +18,8 @@ export const Dashboard = () => {
     const [projects, setProjects] = useState([])
     const [loading, setLoading] = useState(true)
     const router = useRouter()
+    const [page, setPage] = useState(true)
+    const [doneDeletion, setDoneDeletion] = useState(false)
 
     useEffect(() => {
         async function init() {
@@ -27,7 +30,8 @@ export const Dashboard = () => {
                 const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/resources`, {
                     withCredentials: true
                 })
-                setProjects(result.data.data)
+                setProjects(result.data.data.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                .slice(0, 5))
                 setUser(whoami.data);
                 setLoading(false)
             } catch (error) {
@@ -35,8 +39,7 @@ export const Dashboard = () => {
             }
         }
         init();
-    }, [setUser]);
-
+    }, [setUser, doneDeletion]);
     return (
         <div className="bg-gray-950 h-screen flex flex-col justify-between">
             <StartBox isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -53,9 +56,9 @@ export const Dashboard = () => {
                     to="opacity-100 translate-y-0 translate-x-0"
                     style={{ transitionTimingFunction: "cubic-bezier(0.25, 0.4, 0.55, 1.4)" }}
                 >
-                    <Sidebar editProfileHref="/dashboard/edit" setIsOpen={setIsOpen} />
+                    <Sidebar editProfileHref="/dashboard/edit" page={page} setPage={setPage} />
                 </AnimateIn>
-                <Projects projects={projects} setIsOpen={setIsOpen}/>
+                {page? <Projects projects={projects} setIsOpen={setIsOpen} title="Your Recent Projects" setDoneDeletion={setDoneDeletion} deletion={doneDeletion} /> : <EditProfile />}
                 <Blogs />
             </section>
             <Footer />

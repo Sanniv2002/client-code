@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 
-export const Header = ({ loggedIn, isAdmin, adminPage = false }: { loggedIn: boolean, isAdmin: boolean, adminPage?: boolean }) => {
+export const Header = ({ loggedIn, isAdmin, otherPage = false }: { loggedIn: boolean, isAdmin: boolean, otherPage?: boolean }) => {
     const router = useRouter()
     return (
         <header className="flex justify-between items-center p-4">
@@ -16,7 +16,7 @@ export const Header = ({ loggedIn, isAdmin, adminPage = false }: { loggedIn: boo
                             <path fill="currentColor" d="M10 0L12.5 7.5H20L14 12.5L16.5 20L10 15L3.5 20L6 12.5L0 7.5H7.5L10 0Z" />
                         </svg>
                     )}
-                    {adminPage ? <button
+                    {otherPage ? <button
                         onClick={() => router.push("/dashboard")}
                         type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center">
                         Dashboard

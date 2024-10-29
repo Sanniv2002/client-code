@@ -39,10 +39,7 @@ const StartBox = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: React.Dis
                     }
                     const messages = value.split(/data:\s+/);
                     if(messages.length === 1 && JSON.parse(messages[0])){
-                        setResource({
-                            uri: `${JSON.parse(messages[0]).alias}.${process.env.NEXT_PUBLIC_RESOURCE_DOMAIN}`
-                        })
-                        router.push("/workspace")
+                        router.push(`/workspace?alias=${JSON.parse(messages[0]).alias}&env=${selectedEnvironment}`)
                         return
                     }
                     messages.slice(1).forEach((msg: any) => {

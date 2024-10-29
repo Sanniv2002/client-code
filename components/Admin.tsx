@@ -72,7 +72,7 @@ export const Admin = () => {
 
     return (
         <div className="bg-gray-950 h-screen flex flex-col">
-            <Header loggedIn={user.isLoggedIn} isAdmin={user.role === 'ADMIN'} adminPage={true} />
+            <Header loggedIn={user.isLoggedIn} isAdmin={user.role === 'ADMIN'} otherPage={true} />
             <div className="px-14 flex flex-col gap-2 flex-grow">
             {loading ? <SkeletonTable /> : <Table resources={resources} />}
                 <button
