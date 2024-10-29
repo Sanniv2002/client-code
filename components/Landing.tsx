@@ -26,16 +26,6 @@ export default function Landing() {
         }
     }, []);
 
-    const handleShowToast = () => {
-        addToast({
-            type: 'Info',
-            src: '/path/to/image.jpg',
-            who: 'User Name',
-            content: 'This is a toast notification!',
-            time: new Date().toLocaleTimeString(),
-        });
-    };
-
     return (
         <div className="bg-gray-950 h-screen flex flex-col">
             <Header loggedIn={false} isAdmin={false} />
