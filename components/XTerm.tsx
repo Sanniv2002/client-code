@@ -11,14 +11,19 @@ export default function XTerm({ alias }: { alias: string }) {
   const [render, setRender] = useRecoilState(renderAtom);
   const setLoading = useSetRecoilState(loadingAtom);
   const [socket, setSocket] = useState<WebSocket | null>(null);
+  const [attempt, setAttempt] = useState(0);
 
-  useEffect(() => {
+  const MAX_RETRIES = 5; // Maximum reconnection attempts
+  const RECONNECT_INTERVAL = 2000; // Interval between reconnect attempts in ms
+
+  const createWebSocket = () => {
     const wsUrl = `wss://${alias}.${process.env.NEXT_PUBLIC_RESOURCE_DOMAIN}`;
     const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
       console.log("WebSocket connection opened");
       initSocket(ws);
+      setAttempt(0); // Reset attempts on successful connection
     };
 
     ws.onerror = (error) => {
@@ -27,11 +32,25 @@ export default function XTerm({ alias }: { alias: string }) {
 
     ws.onclose = (event) => {
       console.warn("WebSocket closed:", event);
+      if (attempt < MAX_RETRIES) {
+        setTimeout(() => {
+          console.log(`Reconnecting... Attempt ${attempt + 1}`);
+          setAttempt((prev) => prev + 1);
+          createWebSocket();
+        }, RECONNECT_INTERVAL);
+      } else {
+        console.error("Max reconnection attempts reached. Connection failed.");
+      }
     };
 
     setSocket(ws);
+  };
+
+  useEffect(() => {
+    createWebSocket();
+
     return () => {
-      ws.close();
+      socket?.close();
       setSocket(null);
     };
   }, [alias]);
@@ -62,7 +81,6 @@ export default function XTerm({ alias }: { alias: string }) {
             )
           ) {
             setRender((prev) => !prev);
-            console.log("Render state toggled:", !render);
           }
           commandBuffer = "";
           terminal.write("\r");
@@ -83,7 +101,6 @@ export default function XTerm({ alias }: { alias: string }) {
         terminal.write(message);
       };
 
-      // Clean up the terminal on component unmount
       return () => {
         terminal.dispose();
       };
