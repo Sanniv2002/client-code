@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Terminal } from "xterm";
 import "xterm/css/xterm.css";
-import { socket } from "@/socket";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { loadingAtom, renderAtom } from "@/store/atoms";
 
@@ -11,6 +10,12 @@ export default function XTerm({alias} : {alias: string}) {
   const terminalRef = useRef<HTMLDivElement>(null);
   const [render, setRender] = useRecoilState(renderAtom);
   const setLoading = useSetRecoilState(loadingAtom);
+  const [socket, setSocket] = useState<WebSocket>()
+
+  useEffect(() => {
+    const wsUrl = `wss://${alias}.${process.env.NEXT_PUBLIC_RESOURCE_DOMAIN}`;
+    setSocket(new WebSocket(wsUrl))
+  }, [])
 
   const initSocket = (ws: WebSocket) => {
     setLoading(true);
@@ -33,14 +38,13 @@ export default function XTerm({alias} : {alias: string}) {
       });
 
       terminal.open(terminalRef.current as HTMLDivElement);
-      const wsUrl = `wss://${alias}.${process.env.NEXT_PUBLIC_RESOURCE_DOMAIN}`;
-      initSocket(new WebSocket(wsUrl));
+      initSocket(socket!);
 
       let commandBuffer = "";
 
       terminal.onData((data: string) => {
         if (data === "\r") {
-          socket.send(commandBuffer);
+          socket!.send(commandBuffer);
           if (
             commandBuffer.includes("mkdir") ||
             commandBuffer.includes("cp") ||
@@ -68,7 +72,7 @@ export default function XTerm({alias} : {alias: string}) {
         }
       });
 
-      socket.onmessage = (event) => {
+      socket!.onmessage = (event) => {
         const message = event.data;
         terminal.write(message);
       };
