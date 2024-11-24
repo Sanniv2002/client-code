@@ -1,6 +1,6 @@
 'use client'
 
-import Workspace from "@/components/Workspace";
+import Workspace from "@/components/Workspace-v2";
 import { useSearchParams } from "next/navigation";
 import { RecoilRoot } from "recoil";
 
